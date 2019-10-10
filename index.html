@@ -1,359 +1,1084 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		
-		<!--==== Style code ====-->
-		<style type="text/css">
-		html {
-			background-color: #FFFFFF;
-			font-family: sans-serif;
-			font-size: 130%;
-			color: #000000;
-		}
-		body {
-			max-width: 40em;
-			margin-left: auto;
-			margin-right: auto;
-		}
-		h1 {
-			text-align: center;
-			font-size: 160%;
-		}
-		form .section {
-			padding: 0.3em 0.5em;
-			background-color: #FCFCFC;
-			border: 0.05em solid #E0E0E0;
-			border-radius: 0.5em;
-		}
-		form table {
-			border-collapse: collapse;
-		}
-		form input {
-			font-family: inherit;
-			font-size: inherit;
-		}
-		form #charset label:hover {
-			background-color: #F0F0F0;
-		}
-		form #charset td {
-			padding: 0em;
-		}
-		form #charset input[type=checkbox] {
-			margin: 0em;
-		}
-		form #charset label {
-			margin-left: 0.2em;
-			padding: 0.1em 0.3em 0.1em 0.3em;
-			border-radius: 0.2em;
-		}
-		form #charset small {
-			font-size: 70%;
-			color: #A0A0A0;
-		}
-		form #type td {
-			padding: 0.2em 0em;
-		}
-		form #type input[type=number] {
-			text-align: right;
-		}
-		form input[type=submit], form input[type=button] {
-			padding: 0.2em 0.6em;
-		}
-		form #password {
-			margin-left: 0.3em;
-			padding: 0.1em 0.3em;
-			background-color: #F8F8F8;
-			border-radius: 0.2em;
-			font-family: "Consolas", monospace;
-			font-size: 140%;
-		}
-		p.lowlight {
-			color: #A0A0A0;
-		}
-		hr {
-			border: none;
-			border-top: 0.05em solid #B0B0B0;
-		}
-		a {
-			color: inherit;
-			text-decoration: none;
-		}
-		a:hover {
-			text-decoration: underline;
-		}
-		</style>
-	</head>
-	
-	
-	<!--==== HTML body code ====-->
-	
-	<body>
-		<h1>Random password generator</h1>
-		<form action="#" method="get" onsubmit="doGenerate(event);">
-			<div id="charset" class="section" style="margin:0.8em 0em">
-				<p style="margin:0.3em 0em">Character set:</p>
-				<table style="line-height:1.5">
-					<tbody>
-						<tr>
-							<td><input type="checkbox" id="custom"></td>
-							<td><label for="custom"> Custom:</label> <input type="text" id="customchars" value="" size="15" style="width:10em; font-size:80%" oninput="document.getElementById('custom').checked=true;"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="section">
-				<table id="type">
-					<tbody>
-						<tr>
-							<td><input type="radio" name="type" id="by-length" checked="checked"> <label for="by-length">Length:&#xA0;</label></td>
-							<td><input type="number" min="0" value="10" step="1" id="length" style="width:4em" oninput="document.getElementById('by-length').checked=true;"> characters</td>
-						</tr>
+5:15 PM 10/10/2019
+<style media="screen">
+/*
+Colours:
+- Brand colour: hsla(200, 98%, 26%, 1);
+- Text colour: hsla(200, 98%, 16%, 1);
+- Background colour: hsla(200, 98%, 95%, 1);
+*/
+section,
+nav,
+article,
+aside,
+header,
+footer,
+address,
+figure,
+main {
+	display: block;
+}
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 
-					</tbody>
-				</table>
-			</div>
-			<p style="max-width:unset; line-height:1.35; word-break:break-all">
-				<input type="submit" value="Generate">
-				<input type="button" value="Copy" id="copy-button" onclick="doCopy();" disabled="disabled">
-				Password: <span id="password"></span>
-			</p>
-			<p id="statistics" class="lowlight">&#xA0;</p>
-			<p class="lowlight" style="max-width:unset">Entropy sources:<br>
-				✓ <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random"><code>Math.random()</code></a> (low security)<br>
-				<span id="crypto-getrandomvalues-entropy"></span> <a href="https://developer.mozilla.org/en-US/docs/Web/API/RandomSource/getRandomValues"><code>crypto.getRandomValues()</code></a> (high security)</p>
-		</form>
-		<hr>
+/* “an element styled display: flex will be displayed on screen regardless of the hidden attribute being present.” (https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden) */
+[hidden] {
+	display: none !important;
+}
+
+/* Typefaces */
+body,
+fieldset[aria-labelledby="btnGenerate"],
+#btnGenerate,
+#btnCopy,
+#btnShowOptions,
+#btnSaveTheseOptions {
+	/*font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;*/
+/* Use system fonts, for performance, Hat-tip: https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/#what-to-do-today */
+font-family: 
+	-apple-system, BlinkMacSystemFont,
+	"Segoe UI", 
+	"Roboto", 
+	"Oxygen", 
+	"Ubuntu", 
+	"Cantarell", 
+	"Fira Sans", 
+	"Droid Sans", 
+	"Helvetica Neue", 
+	sans-serif;
+}
+/*body,
+fieldset[aria-labelledby="btnGenerate"],
+#btnCopy,
+#btnShowOptions,
+#btnSaveTheseOptions {
+	font-weight: 300;
+}
+strong,
+#btnGenerate {
+	font-weight: 500;
+}*/
+#outputPassword, 
+#outputMnemonic,
+kbd {
+	/*font-family: "Ubuntu Mono", "Lucida Console", "Lucida Sans Typewriter", monospace;*/
+	font-family: 
+		"SFMono-400", 
+		Menlo, 
+		"Segoe UI Mono", 
+		"Roboto Mono", 
+		"Oxygen Mono", 
+		"Ubuntu Mono", 
+		"Inconsolata 10", 
+		"Fira Mono", 
+		"Droid Sans Mono", 
+		"Andale Mono", 
+		monospace;
+	font-weight: 400;
+} /* Check https://twitter.com/mwichary/status/783023988855496704 */
+/* End of typefaces */
+body {
+	/*font-size: 93.75%;*/
+	font-size: 100%;
+	line-height: 1.5;
+	max-width: 100%;
+	margin: 0;
+	position: relative;
+	color: hsla(200, 98%, 16%, 1);
+	background-color: hsla(200, 98%, 95%, 1);
+}
+a:link {
+	text-decoration: none;
+	border-bottom: 0.0625em solid;
+}
+a:visited {
+	border-bottom-style: dotted;
+}
+a:hover,
+a:active,
+a:focus {
+	border-bottom-style: none;
+}
+/*
+mark {
+	background-color: transparent;
+	font-weight: 700;
+	padding-right: 0.0625rem;
+	padding-left: 0.0625rem;
+}
+*/
+mark>a:link {
+    border-bottom-width: 0;
+}
+h1 {
+	/*font-size: 2.18181818em;*/
+	font-size: 2.3125em;
+	margin-top: 0;
+	text-rendering: optimizeLegibility;
+	font-kerning: auto;
+}
+h2 {
+	font-size: 1.75em;
+	margin-top: 1rem;
+}
+h3 {
+	font-size: 1.3125em;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+h1,
+h2,
+h3,
+btnGenerate {
+	line-height: 1.5;
+	padding: 1rem; 
+}
+h1,
+h2 {
+	background-color: hsla(200, 98%, 26%, 1);
+	color: hsla(200, 98%, 95%, 1);
+	text-align: center;
+}
+h2,
+h3 {
+	font-weight: 400;
+}
+h1,
+[aria-labelledby="HowToRememberYourStrongPasswords"] h2,
+[aria-labelledby="Testimonials"] h2,
+[aria-labelledby="ShareStrongPasswordGenerator"] h2,
+[aria-labelledby="About"] h2,
+#btnGenerate {
+	font-weight: bold;
+	text-shadow: 0 0.25em 0.5em rgba(0,0,0,0.25);
+	box-shadow: 0 0.25em 0.5em rgba(0,0,0,0.25);
+}
+[aria-labelledby="StrongPasswordDefinition"] h2, 
+form h2 {
+	color: hsla(200, 98%, 26%, 1);
+	background-color: hsla(200, 98%, 95%, 1);
+}
+form h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+p,
+ul,
+ol {
+	margin-right: 1rem;
+	margin-bottom: 2rem;
+	margin-left: 1rem;
+}
+kbd,
+small {
+	font-size: 1em;
+}
+cite {
+	font-style: normal;
+}
+ul,
+ol {
+	list-style-position: outside;
+}
+
+form,
+article,
+[role="contentinfo"] {
+	margin-bottom: 2rem;
+}
+fieldset {
+	padding: 0;
+	margin: 0;
+	border-radius: 0.5rem;
+}
+/*legend {
+	font-weight: 500;
+}*/
+legend,
+#spanUseThisOnlyOnPrivateComputers {
+	margin-left: 1.5rem;
+	padding-left: 0;
+} 
+fieldset[aria-labelledby="btnGenerate"] {
+	border-width: 0;
+}
+
+#olOptions {
+	list-style-type: none;
+	padding-left: 0;
+	margin-top: 0.5rem;
+	margin-left: 0;
+/*
+	position: relative; 
+	right: 1.25rem;
+*/
+}
+#olOptions li {
+/*
+	padding: 0.25rem 0;
+*/
+	margin-bottom: 0.5rem;
+}
+#olOptions li input[type="checkbox"] {
+	float: left;
+	position: relative;
+	top: 0.5em;
+	left: 0.5em;
+/*
+	margin-right: 0.5em;
+*/}
+#olOptions li input[type="checkbox"]+label {
+	display: block;
+	padding: 0.25rem 0.25rem 0.25rem 1.5rem;
+	border-radius: 0.5rem;
+	transition: background-color 0.125s ease-in-out;
+}
+#olOptions li input[type="checkbox"]+label,
+#olOptions li input[type="checkbox"]+label kbd {
+	background-color: hsla(120,15%,90%,1);
+}
+#olOptions li input[type="checkbox"]:checked+label,
+#olOptions li input[type="checkbox"]:checked+label kbd {
+	background-color: hsla(120,60%,75%,1);
+}
+#btnCopy,
+#btnGenerate,
+#btnShowOptions,
+#btnSaveTheseOptions {
+	padding: 0.5rem 1rem;
+	border-width: 0;
+	border-radius: 0.5rem;
+}
+#btnShowOptions,
+#btnSaveTheseOptions {
+	margin-bottom: 0;
+	font-size: 1.27272727em;
+}
+#btnCopy {
+	margin: 0.5rem auto;
+	font-size: 1rem;
+	display: block;
+}
+#spanUseThisOnlyOnPrivateComputers {
+	display: block;
+	margin: 0 1.5rem;
+}
+#btnGenerate {
+	display: block;
+	color: hsla(200, 98%, 16%, 1);
+	background: hsla(120,60%,61%,1);
+	background: -webkit-linear-gradient(hsla(120,60%,51%,1), hsla(120,60%,71%,1));
+	background: linear-gradient(hsla(120,60%,51%,1), hsla(120,60%,71%,1));
+	font-size: 1.63636364em;
+	text-shadow: 0 0.03125em 0.03125em hsla(200,98%,95%,1);
+	transition: box-shadow 0.125s ease-in-out;
+	box-shadow: 0 0.25em 0 hsl(120,60%,30%), 0 0.5em 0.75em hsla(0, 0%, 0%, 0.5);
+}/* Hat-tip: http://blog.typekit.com/2011/02/10/type-study-an-all-css-button/ */
+#btnGenerate:active {
+	box-shadow: 0 0.125em 0 hsl(120,60%,31%), 0 0.25em 0.375em rgba(0, 0, 0, 0.5);
+	-ms-transform: translate(0, 0.125em);
+	-webkit-transform: translate(0, 0.125em);
+	transform: translate(0, 0.125em);
+}
+fieldset[aria-labelledby="btnGenerate"],
+#btnGenerate,
+#outputPassword,
+#olOptions>li,
+#ddForOutputPassword,
+#btnShowOptions,
+#btnSaveTheseOptions,
+spanUseThisOnlyOnPrivateComputers,
+fieldset[aria-labelledby="btnGenerate"] dl,
+#fsOptions,
+#fsOptions ol {
+	width: 100%;
+}
+
+fieldset>dl {
+	margin-bottom: 2rem;
+}
+fieldset>dl>dd {
+	margin-left: 0;
+	padding-left: 0;
+}
+#fsOptions {
+	margin: 0;
+	border-width: 0;
+	max-width: 19.203125rem;
+	display: flex;
+margin-left: auto;
+margin-right: auto;
+}
+[for="inputLength"] {
+	margin-left: 1.5rem;
+}
+[aria-invalid="true"] {
+	border-color: red;
+}
+input:invalid {
+	color: red;
+}
+#ddForOutputPassword {
+	display: -webkit-flex;	display: -moz-flex;	display: -ms-flex;	display: flex;
+	-webkit-flex-direction: column;	-moz-flex-direction: column;	-ms-flex-direction: column;	flex-direction: column;
+	-webkit-justify-content: center;	-moz-justify-content: center;	-ms-justify-content: center;	justify-content: center;
+	-webkit-align-items: center;	-moz-align-items: center;	-ms-align-items: center;	align-items: center;
+}
+kbd,
+#outputPassword, 
+#outputMnemonic {
+	color: hsl(348, 64%, 40%);
+	background-color: #F9FDFC;
+}
+#outputPassword,
+#outputMnemonic {
+	display: inline-block;
+    background: hsla(200, 98%, 95%, 1);
+	/*box-shadow: 0 0 2em hsl(120,60%,30%);*/
+	padding: 0.25rem;
+	/* next 5 lines prevent these fields from making this section wider when the password and mnemonic are generated */
+	width: 100%;
+	max-width: 19.203125rem;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+#outputPassword {
+	white-space: pre; /* prevents double spaces from displaying as a single space, and prevents line breaks (they would introduce extra spaces when the user copies and pastes the password) */
+	overflow-x: auto;
+}
+#outputMnemonic {
+	word-wrap: break-word; /* allows mnemonic to wrap */
+}
+#spanPasswordWasCopied {
+	display: block;
+	/*margin-left: auto;
+	margin-right: auto;*/
+}
+#LearnHowToRememberTheseStrongPasswords {
+	text-align: center;
+	margin-top: 1rem;
+	margin-right: 0;
+	margin-bottom: 2rem;
+	margin-left: 0;
+}
+
+#divWrapperForFormAndDefinition {
+	margin-bottom: 1rem;
+	max-width: 100%;
+}
+#divWrapperForFormAndDefinition,
+#divWrapperForFormAndDefinition>form,
+fieldset[aria-labelledby="btnGenerate"] {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#fsOptions {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+}
+
+[aria-labelledby="StrongPasswordDefinition"],
+form {
+	padding: 0.25rem 0.5rem 2rem;
+	border-radius: 1rem;
+}
+[aria-labelledby="StrongPasswordDefinition"],
+[aria-labelledby="StrongPasswordDefinition"] h2,
+form,
+form h2 {
+	background-color: hsla(200, 98%, 99%, 1);
+}
+[aria-labelledby="StrongPasswordDefinition"] h2 {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	padding-bottom: 0;
+}
+[aria-labelledby="StrongPasswordDefinition"] h3 {
+	padding-bottom: 0.5rem;
+}
+[aria-labelledby="StrongPasswordDefinition"] section {
+	width: 50%;
+	float: left;
+	padding: 0 2rem;
+}
+[aria-labelledby="StrongPasswordDefinition"] section:nth-of-type(2) {
+	border-left: 0.25em solid hsla(200, 98%, 95%, 1);
+}
+[aria-labelledby="StrongPasswordDefinition"] ul,
+[aria-labelledby="StrongPasswordDefinition"] ol {
+	margin-top: 0;
+	padding-left: 0;
+    max-width: 20rem;
+}
+[aria-labelledby="StrongPasswordDefinition"] li {
+	margin-bottom: 0.5rem;
+}
+
+[aria-labelledby="HowToRememberYourStrongPasswords"],
+[aria-labelledby="Testimonials"] {
+	position: relative;
+} /* Hat-tip: http://nicolasgallagher.com/pure-css-speech-bubbles/ */
+[aria-labelledby="HowToRememberYourStrongPasswords"] ul,
+[aria-labelledby="Testimonials"] ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] li,
+[aria-labelledby="Testimonials"] li {
+	padding: 1rem;
+	margin: 0 0.5rem 1rem;
+	/*background: linear-gradient(hsla(200, 98%, 75%, 0.5), hsla(200, 98%, 50%, 0));*/
+	border-radius: 1rem;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] li {
+	max-width: 20rem;
+}
+[aria-labelledby="Testimonials"] li {
+	max-width: 40rem;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] figure,
+[aria-labelledby="Testimonials"] figure {
+	margin: 0 0 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: stretch;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] blockquote,
+[aria-labelledby="Testimonials"] blockquote {
+	position: relative;
+	margin: 0 0 0.25rem;
+	padding: 1rem;
+	color: #000;
+	background-color: white;
+	border-radius: 2rem;
+	z-index: 1;
+	box-shadow: 0 0.25em 0.5em rgba(0,0,0,0.25);
+	word-wrap: break-word;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] blockquote,
+[aria-labelledby="Testimonials"] blockquote {
+	max-width: 28em;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] figure>blockquote:after,
+[aria-labelledby="Testimonials"] figure>blockquote:after {
+	content: "";
+	position: absolute;
+	bottom: -1.5rem;
+	width: 0;
+	border-width: 2rem 2rem 0;
+	border-style: solid;
+	border-color: #fff transparent;
+}
+/*[aria-labelledby="Testimonials"]>ul>li:nth-child(even)>figure>blockquote:after {
+	right:4rem;
+	-webkit-transform:skewX(45deg);
+	-moz-transform:skewX(45deg);
+	-ms-transform:skewX(45deg);
+	transform:skewX(45deg);
+}*/
+[aria-labelledby="HowToRememberYourStrongPasswords"] figure>blockquote:after,
+[aria-labelledby="Testimonials"] figure>blockquote:after /*[aria-labelledby="Testimonials"]>ul>li:nth-child(odd)>figure>blockquote:after */{
+	left:4rem;
+	-webkit-transform:skewX(-45deg);
+	-moz-transform:skewX(-45deg);
+	-ms-transform:skewX(-45deg);
+	transform:skewX(-45deg);
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] figure>figcaption,
+[aria-labelledby="Testimonials"] figure>figcaption {
+	position: relative;
+	top: 0.5rem;
+	/*background-color: hsla(200, 98%, 50%, 0.25);*/
+	background-color: hsla(200, 49%, 90%, 1);
+	color: #000;
+	padding: 1rem;
+	width: 61.803398874989484820458683436564%;
+	box-shadow: 0 0.25em 0.5em rgba(0,0,0,0.25);
+flex-grow: 1; /* to make the figure take up all the vertical space below the blockquote */
+border-radius: 1rem;
+}
+cite {
+	z-index: 2;
+	display: block;
+height: 100%;
+}
+/*[aria-labelledby="Testimonials"] cite>a:last-child {*/
+cite>a:last-child {
+	display: block;
+	margin-top: 1rem;
+	border-bottom-width: 0;
+	display: block;
+} /* selects the link with the logo */
+/*[aria-labelledby="Testimonials"] cite>a:last-child>img {*/
+cite>a:last-child>img {
+	max-width: 100%;
+	max-height: 100%;
+} /* selects the logo */
+
+[aria-labelledby="HowToRememberYourStrongPasswords"] figure,
+[aria-labelledby="Testimonials"] figure
+/*[aria-labelledby="TheNewYorkTimes"],
+[aria-labelledby="PCMag"] */{
+	margin: 1em 0;
+}
+.twitter {
+	margin-left: 1rem;
+}
+.copyright {
+	padding-top: 1rem;
+	border-top: 0.125rem groove;
+	margin-top: 2rem;
+	text-align: center;
+}
+input[disabled]+label,
+input[disabled]+label>kbd {
+	color: #555;
+	text-decoration: line-through;
+}
+.ads {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+}
+.ad {
+	width: 300px;
+	height: 250px;
+	padding: 0;
+	margin: 0 auto 4rem;
+}
+aside.halfPageAd {
+    display: none;
+}
+[role="contentinfo"]>p {
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] ul {
+	margin-left: 0;
+	margin-right: 1rem;
+	padding-left: 1.125em;
+	list-style-type: square;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"]>ul {
+	list-style-type: none;
+}
+[aria-labelledby="HowToRememberYourStrongPasswords"] li {
+	margin-top: 0.5rem;
+}
+#pcmag {color: red;
+	width: 100rem;
+}
+
+[aria-labelledby="ShareStrongPasswordGenerator"] p,
+[aria-labelledby="ShareStrongPasswordGenerator"] ul {
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
+[aria-labelledby="ShareStrongPasswordGenerator"] ul {
+	padding-left: 0;
+	list-style-type: none;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+}
+[aria-labelledby="ShareStrongPasswordGenerator"] li {
+	display: inline-block;
+	margin: 0 1rem 1rem;
+}
+[aria-labelledby="ShareStrongPasswordGenerator"] li a {
+	border-bottom-width: 0;
+}
+[aria-labelledby="ShareStrongPasswordGenerator"] li a img {
+	border-radius: 0.25rem;
+}
+[aria-labelledby="About"] p,
+[aria-labelledby="About"] ul {
+	max-width: 40rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+p.scores {
+	margin-bottom: 0;
+}
+ul.scores {
+	margin-top: 0;
+}
+
+@media only screen and (min-width: 22em) {
+	.ad {
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+}
+
+@media only screen and (min-width: 43em) {
+	[role="main"]>form {
+		margin-bottom: 0;
+	}
+	[aria-labelledby="HowToRememberYourStrongPasswords"],
+	[aria-labelledby="Testimonials"] {
+		margin-bottom: 0;
+	}
+	[aria-labelledby="HowToRememberYourStrongPasswords"] ul,
+	[aria-labelledby="Testimonials"] ul {
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: space-around;
+		align-items: stretch;
+		margin-bottom: 0;
+	}
+	/*[aria-labelledby="HowToRememberYourStrongPasswords"] li,*/
+	[aria-labelledby="Testimonials"] li {
+		flex-basis: 19rem;
+		flex-grow: 1; /*set default here; set different values inline*/
+
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: stretch;
+	}
+}
+
+@media only screen and (max-width: 46em) {
+	[aria-labelledby="StrongPasswordDefinition"] {
+		-webkit-order: 2;	-moz-order: 2;	-ms-order: 2;	order: 2;
+	}
+}
+@media only screen and (min-width: 46em) {
+	form>fieldset {
+		margin-top: 1.125rem;
+		margin-left: 1rem;
+		margin-right: 1rem;
+	}
+	#divWrapperForFormAndDefinition {
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: flex-start;
+		justify-content: space-around;
+	}
+	#divWrapperForFormAndDefinition>form, 
+	[aria-labelledby="StrongPasswordDefinition"],
+    aside.halfPageAd {
+		margin-left: 1rem;
+		margin-right: 1rem;
+	}
+/* this next bit is because Safari makes the generator and definition overlap*/
+	[aria-labelledby="StrongPasswordDefinition"] {
+		flex-shrink: 4;
+	}
+}
+
+@media only screen and (min-width: 64rem) {
+    aside.halfPageAd:nth-of-type(2) {
+        display: block;
+    }
+}
+@media only screen and (min-width: 85rem) {
+    aside.halfPageAd:nth-of-type(1) {
+        display: block;
+    }
+}
+</style>
+<body onload="addEventHandlers()">
+<header>
+	<h1>Strong Password Generator&nbsp;<span role="presentation">🔐</span></h1>
+</header>
+<main>
+<div id="divWrapperForFormAndDefinition">
+    <aside class="halfPageAd">
+        <!-- LargeSkyscraperForSPG --><ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-1970339299953114" data-ad-slot="5182753315"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
+	<article aria-labelledby="StrongPasswordDefinition">
+		<h2 id="StrongPasswordDefinition">LINZ Password Requirements</h2>
+		<section>
+			<h3>A strong password <strong>has</strong>:</h3>
+			<ol>
+				<li>at least <strong>8-16 characters</strong>
+				<li>at least <strong>1 Capital Letter</strong>
+				<li>at least <strong>1 Number</strong>
+				
+			</ol>
+		</section>
+		<section>
+			<h3>POI Requirements</h3>
+			<ul>
+				<li>Ask the user for:
+				<li>2 one these options: <strong>Middle Name, DOB or Email</strong>
+				<li>1 of these: <strong>POI type, Month DC downloaded</strong>
 	
+			</ul>
+		</section>
+	</article>
+	<form aria-labelledby="PasswordGenerator"><!-- onsubmit="return false;"-->
+        <h2 id="PasswordGenerator">Password Generator</h2>
+		<fieldset aria-labelledby="btnGenerate">
+			<input id="btnGenerate" type="button" value="Generate password">
+			<dl style="text-align: center;">
+				<dt>Your new password is:
+					<dd id="ddForOutputPassword">
+						<kbd id="outputPassword" tabindex="-1" aria-live="assertive" spellcheck="false" title="Triple-click the password to select it">[password will appear here]</kbd>
+						<input id="btnCopy" type="button" value="Copy password" hidden>
+						<!--<span id="">…and now see <a href="#HowToRememberYourStrongPasswords">how to remember your strong&nbsp;password</a>!</span>-->
+						<span id="spanPasswordWasCopied" tabindex="-1" aria-live="assertive" hidden></span>
+					</dd>
+					<!-- contenteditable="true" might be causing issues in Safari -->
+				<dt id="dtForOutputMnemonic" hidden>It’s easier to remember as:
+					<dd id="ddForOutputMnemonic" hidden><span id="outputMnemonic" spellcheck="false">[mnemonic will appear here]</span>
+			</dl>
+			<p id="LearnHowToRememberTheseStrongPasswords" hidden>
+				<a href="#HowToRememberYourStrongPasswords"></a>
+			</p>
+
+			<input id="btnShowOptions" type="button" value="Show options…">
+			<fieldset id="fsOptions" hidden>
+				<legend>Options:</legend>
+				<ol id="olOptions">
+					<li>
+						<label for="inputLength">Length:</label>
+						<input id="inputLength" type="number" min="8" value="10" max="4096" aria-invalid="false">
+					<li>
+						<input id="chkShowItsEasierToRememberAs" type="checkbox">
+						<label for="chkShowItsEasierToRememberAs">Show phonetic words (“It’s easier to remember&nbsp;as:”)</label>
+					<li>
+						<input id="chkSymbols" type="checkbox">
+						<label for="chkSymbols">Include punctuation (<kbd>!</kbd>, <kbd>"</kbd>, <kbd>£</kbd>, <kbd>$</kbd>, and so&nbsp;on)</label>
+					<li>
+						<input id="chkAvoidPunctuationUsedInProgramming" type="checkbox">
+						<label for="chkAvoidPunctuationUsedInProgramming">Avoid punctuation used in programming (<kbd title="Backtick">`</kbd>,<kbd title="Dollar sign">$</kbd>,&nbsp;<kbd title="Single quote">&apos;</kbd>, <kbd title="Double quote">&quot;</kbd>, <kbd title="Ampersand">&amp;</kbd>, <kbd title="Space">[space]</kbd>, <kbd title="Comma">,</kbd>, <kbd title="Question mark">?</kbd>, <kbd title="At symbol">@</kbd>, <kbd title="Number sign">#</kbd>, <kbd title="Opening angle bracket">&lt;</kbd>, <kbd title="Closing angle bracket">&gt;</kbd>, <kbd title="Opening round bracket">(</kbd>, <kbd title="Closing round bracket">)</kbd>, <kbd title="Opening curly bracket">{</kbd>, <kbd title="Closing curly bracket">}</kbd>, <kbd title="Opening square bracket">[</kbd>, <kbd title="Closing square bracket">]</kbd>, <kbd title="Forward slash">/</kbd>, <kbd title="Backslash">\</kbd>)</label> <!-- Ticketmaster does not allow ` in passwords -->
+					<li>
+						<input id="chkAvoidSimilarCharacters" type="checkbox">
+						<label for="chkAvoidSimilarCharacters">Avoid similar characters (<kbd title="Number “One”">1</kbd>,&nbsp;<kbd title="Lower case letter “I”">i</kbd>, <kbd title="Upper case letter “I”">I</kbd>, <kbd title="Lower case letter “L”">l</kbd>, <kbd title="Upper case letter “L”">L</kbd>), and (<kbd title="Number “Zero”">0</kbd>, <kbd title="Lower case letter “O”">o</kbd>, <kbd title="Upper case letter “O”">O</kbd>)</label>
+					<li>
+						<input id="btnSaveTheseOptions" type="button" value="Save these options" aria-describedby="spanUseThisOnlyOnPrivateComputers"> 
+                        <span id="spanUseThisOnlyOnPrivateComputers">(Don’t save your options on public&nbsp;computers)</span>
+				</ol>
+			</fieldset>
+<script>
+function $(theID) { "use strict";
+	return(document.getElementById(theID));
+}
+function hide(anID) { "use strict";
+	//$(anID).setAttribute("aria-hidden", "true");
+	$(anID).setAttribute("hidden", "hidden");
+}
+function show(anID) { "use strict";
+	//$(anID).setAttribute("aria-hidden", "false");
+	$(anID).removeAttribute("hidden"); // Attempting to remove an attribute that is not on the element doesn't raise an exception.
+}
+function theSymbols(bAvoidCharactersUsedInProgramming) { "use strict";
+	if (bAvoidCharactersUsedInProgramming) {
+		return ["!", "%", "^", "*", "-", "_", "=", "+", ";", ":", "~", "|", "."]; // 13 characters
+	}
+	return ["`", " ", "!", "\"", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", "@", "#", "~", "|", ",", "<", ".", ">", "/", "?", "\\"]; //32 characters
+}
+function theLetters(bAvoidSimilarCharacters) { "use strict";
+	if (bAvoidSimilarCharacters) {
+		return ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+	}
+	return ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+}
+function theNumbers(bAvoidSimilarCharacters) { "use strict";
+	if (bAvoidSimilarCharacters) {
+		return ["2", "3", "4", "5", "6", "7", "8", "9"];
+	}
+	return ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+}
+
+function getRandomNumber() { "use strict";
+	// crypto.getRandomValues needs a TypedArray; Uint8Array is the smallest one (don’t waste entropy, or processing)
+	// Uint8Array: 0–255
+	// Uint16Array: 0–65535
+	try {
+		var typedArrayWithRandomNumber = new Uint8Array(1);
 		
-		
-		<!--==== JavaScript code ====-->
-		
-		<script type="text/javascript">
-		"use strict";
-		
-		
-		/*-- Configuration --*/
-		
-		var CHARACTER_SETS = [
-			[true, "Numbers", "0123456789"],
-			[true, "Lowercase", "abcdefghijklmnopqrstuvwxyz"],
-			[true, "Uppercase", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
-		];
-		
-		
-		
-		/*-- Global variables --*/
-		
-		var passwordElem   = document.getElementById("password"   );
-		var statisticsElem = document.getElementById("statistics" );
-		var copyElem       = document.getElementById("copy-button")
-		var cryptoObject    = null;
-		var currentPassword = null;
-		
-		
-		
-		/*-- Initialization --*/
-		
-		function initCharsets() {
-			function createElem(tagName, attribs) {
-				var result = document.createElement(tagName);
-				if (attribs !== undefined) {
-					for (var key in attribs)
-						result[key] = attribs[key];
+		// Use crypto random functionality if the browser supports it
+		if (window.crypto && window.crypto.getRandomValues) {
+			window.crypto.getRandomValues(typedArrayWithRandomNumber);
+			return typedArrayWithRandomNumber[0];
+		}
+
+		// Use Microsoft’s crypto random functionality if the browser supports it
+		if (window.msCrypto && window.msCrypto.getRandomValues) {
+			window.msCrypto.getRandomValues(typedArrayWithRandomNumber);
+			return typedArrayWithRandomNumber[0];
+		}
+	} catch (err) {
+		// If the browser doesn’t support crypto random functionality, use Math.random
+		if (!(window.crypto && window.crypto.getRandomValues) && !(window.msCrypto && window.msCrypto.getRandomValues)) {
+			return Math.floor(Math.random() * 255);	// 256 is the size of a Uint8Array, which the other statements in this function use
+		}
+	}
+}
+// Hat-tip: https://defuse.ca/generating-random-passwords.htm
+// To-do: Update these functions based on http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator/10984975#10984975
+function getRandomCharacterFromAnArray(theArray) { "use strict";
+	var x;
+	do {
+		x = getRandomNumber();
+	} while (x >= theArray.length);
+	return theArray[x];
+}
+function getRandomNumberLessThanOrEqualToALimit(theUpperLimit) { "use strict";
+	var x;
+	do {
+		x = getRandomNumber();
+	} while (x >= theUpperLimit);
+	return x;
+}
+function generatePassword(lengthOfPassword, wantSymbols, avoidSimilarCharacters, avoidPunctuationUsedInProgramming) { "use strict";
+	var StrongPasswordArray = [],
+		i,
+		numberOfDigits,
+		numberOfSymbols;
+	for (i = 0; i < lengthOfPassword; i=i+1) {
+		if (getRandomNumber() % 2 === 0) {
+			StrongPasswordArray[i] = getRandomCharacterFromAnArray(theLetters(avoidSimilarCharacters)).toUpperCase();
+		}
+		else {
+			StrongPasswordArray[i] = getRandomCharacterFromAnArray(theLetters(avoidSimilarCharacters));
+		}
+	}
+	numberOfDigits = getRandomNumberLessThanOrEqualToALimit(lengthOfPassword);
+	for (i = 0; i < numberOfDigits; i=i+1) {
+		StrongPasswordArray[(getRandomNumberLessThanOrEqualToALimit(lengthOfPassword)) - 1] = getRandomCharacterFromAnArray(theNumbers(avoidSimilarCharacters));
+	}
+	if (wantSymbols) {
+		numberOfSymbols = getRandomNumberLessThanOrEqualToALimit(lengthOfPassword);
+		for (i = 0; i < numberOfSymbols; i=i+1) {
+			StrongPasswordArray[(getRandomNumberLessThanOrEqualToALimit(lengthOfPassword)) - 1] = getRandomCharacterFromAnArray(theSymbols(avoidPunctuationUsedInProgramming));
+		}
+	}
+	return StrongPasswordArray;
+}
+function validate(StrongPasswordArray, lengthOfPassword, wantSymbols, avoidPunctuationUsedInProgramming) { "use strict";
+	var hasAnUpperCaseLetter = false,
+		hasALowerCaseLetter = false,
+		hasANumber = false,
+		hasASymbol = false,
+		correctLength = false,
+		i,
+		symbolsBeingUsed,
+		iSymbols;
+	for (i = 0; i < StrongPasswordArray.length; i=i+1) {
+		if ("A" <= StrongPasswordArray[i] && StrongPasswordArray[i] <= "Z") {
+			hasAnUpperCaseLetter = true;
+			break;
+		}
+	}
+	for (i = 0; i < StrongPasswordArray.length; i=i+1) {
+		if ("a" <= StrongPasswordArray[i] && StrongPasswordArray[i] <= "z") {
+			hasALowerCaseLetter = true;
+			break;
+		}
+	}
+	for (i = 0; i < StrongPasswordArray.length; i=i+1) {
+		if ("0" <= StrongPasswordArray[i] && StrongPasswordArray[i] <= "9") {
+			hasANumber = true;
+			break;
+		}
+	}
+	if (wantSymbols) {
+		for (i = 0; i < StrongPasswordArray.length; i=i+1) {
+			symbolsBeingUsed = theSymbols(avoidPunctuationUsedInProgramming);
+			for (iSymbols = 0; iSymbols < symbolsBeingUsed.length; iSymbols=iSymbols+1) {
+				if (StrongPasswordArray[i] === symbolsBeingUsed[iSymbols]) {
+					hasASymbol = true;
+					break;
 				}
-				return result;
 			}
-			
-			var container = document.querySelector("#charset tbody");
-			var endElem = document.querySelector("#charset tbody > tr:last-child");
-			CHARACTER_SETS.forEach(function(entry, i) {
-				var tr = createElem("tr");
-				var td = tr.appendChild(createElem("td"));
-				var input = td.appendChild(createElem("input", {
-					type: "checkbox",
-					checked: entry[0],
-					id: "charset-" + i}));
-				var td = tr.appendChild(createElem("td"));
-				var label = td.appendChild(createElem("label", {
-					htmlFor: "charset-" + i,
-					textContent: " " + entry[1] + " "}));
-				var small = label.appendChild(createElem("small", {
-					textContent: "(" + entry[2] + ")"}));
-				container.insertBefore(tr, endElem);
-			});
 		}
-		
-		
-		function initCrypto() {
-			var elem = document.getElementById("crypto-getrandomvalues-entropy");
-			elem.textContent = "\u2717";  // X mark
-			
-			if ("crypto" in window)
-				cryptoObject = crypto;
-			else if ("msCrypto" in window)
-				cryptoObject = msCrypto;
-			else
-				return;
-			
-			if (!("getRandomValues" in cryptoObject) || !("Uint32Array" in window) || typeof Uint32Array != "function")
-				cryptoObject = null;
-			else
-				elem.textContent = "\u2713";
-		}
-		
-		
-		
-		/*-- Entry points from HTML code --*/
-		
-		function doGenerate(ev) {
-			ev.preventDefault();
-			
-			// Get and check character set
-			var charset = getPasswordCharacterSet();
-			if (charset.length == 0) {
-				alert("Error: Character set is empty");
-				return;
-			} else if (document.getElementById("by-entropy").checked ? charset.length == 1 : false) {
-				alert("Error: Need at least 2 distinct characters in set");
-				return;
+	}
+	else {
+		hasASymbol = true;
+	}
+	correctLength = (StrongPasswordArray.length === parseFloat(lengthOfPassword));
+	if (!hasAnUpperCaseLetter || !hasALowerCaseLetter || !hasANumber || !hasASymbol || !correctLength) {
+		lengthOfPassword = "";
+		hasAnUpperCaseLetter = false;
+		hasALowerCaseLetter = false;
+		hasANumber = false;
+		hasASymbol = false;
+		correctLength = false;
+		return false;
+	}
+	return true;
+}
+function makeMnemonic(StrongPasswordArray, avoidPunctuationUsedInProgramming) { "use strict";
+	var wordsArray = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "x-ray", "yankee", "zulu"],
+		lettersArray = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
+		easyToRememberArray = [],
+		i,
+		iLetters,
+		symbolsBeingUsed,
+		iSymbols,
+		easyToRemember = "";		
+	for (i = 0; i < StrongPasswordArray.length; i=i+1) {
+		for (iLetters = 0; iLetters < lettersArray.length; iLetters=iLetters+1) {
+			if (StrongPasswordArray[i] === lettersArray[iLetters].toUpperCase()) {
+				easyToRememberArray[i] = wordsArray[iLetters].toUpperCase() + "\n";
 			}
-			
-			// Calculate desired length
-			var length;
-			if (document.getElementById("by-length").checked)
-				length = parseInt(document.getElementById("length").value, 10);
-			else if (document.getElementById("by-entropy").checked)
-				length = Math.ceil(parseFloat(document.getElementById("entropy").value) * Math.log(2) / Math.log(charset.length));
-			else
-				throw "Assertion error";
-			
-			// Check length
-			if (0 > length) {
-				alert("Negative password length");
-				return;
-			} else if (length > 10000) {
-				alert("Password length too large");
-				return;
+			if (StrongPasswordArray[i] === lettersArray[iLetters]) {
+				easyToRememberArray[i] = wordsArray[iLetters] + "\n";
 			}
-			
-			// Generate password
-			currentPassword = generatePassword(charset, length);
-			
-			// Calculate and format entropy
-			var entropy = Math.log(charset.length) * length / Math.log(2);
-			var entropystr;
-			if (70 > entropy)
-				entropystr = entropy.toFixed(2);
-			else if (200 > entropy)
-				entropystr = entropy.toFixed(1);
-			else
-				entropystr = entropy.toFixed(0);
-			
-			// Set output elements
-			passwordElem.textContent = currentPassword;
-			statisticsElem.textContent = "Length = " + length + " chars, \u00A0\u00A0Charset size = " +
-				charset.length + " symbols, \u00A0\u00A0Entropy = " + entropystr + " bits";
-			copyElem.disabled = false;
 		}
-		
-		
-		function doCopy() {
-			var container = document.querySelector("body");
-			var textarea = document.createElement("textarea");
-			textarea.style.position = "fixed";
-			textarea.style.opacity = "0";
-			container.insertBefore(textarea, container.firstChild);
-			textarea.value = currentPassword;
-			textarea.focus();
-			textarea.select();
-			document.execCommand("copy");
-			container.removeChild(textarea);
+		if ("0" <= StrongPasswordArray[i] && StrongPasswordArray[i] <= "9") {
+			easyToRememberArray[i] = StrongPasswordArray[i];
 		}
-		
-		
-		
-		/*-- Low-level functions --*/
-		
-		function getPasswordCharacterSet() {
-			// Concatenate characters from every checked entry
-			var rawCharset = "";
-			CHARACTER_SETS.forEach(function(entry, i) {
-				if (document.getElementById("charset-" + i).checked)
-					rawCharset += entry[2];
-			});
-			if (document.getElementById("custom").checked)
-				rawCharset += document.getElementById("customchars").value;
-			rawCharset = rawCharset.replace(/ /g, "\u00A0");  // Replace space with non-breaking space
-			
-			// Parse UTF-16, remove duplicates, convert to array of strings
-			var charset = [];
-			for (var i = 0; rawCharset.length > i; i++) {
-				var c = rawCharset.charCodeAt(i);
-				if (0xD800 > c || c >= 0xE000) {  // Regular UTF-16 character
-					var s = rawCharset.charAt(i);
-					if (charset.indexOf(s) == -1)
-						charset.push(s);
-					continue;
+		symbolsBeingUsed = theSymbols(avoidPunctuationUsedInProgramming);
+		for (iSymbols = 0; iSymbols < symbolsBeingUsed.length; iSymbols=iSymbols+1) {
+			if (StrongPasswordArray[i] === symbolsBeingUsed[iSymbols]) {
+				easyToRememberArray[i] = StrongPasswordArray[i];
+				/* use "[space]" to represent a space character */
+				if (StrongPasswordArray[i] === " ") {
+					easyToRememberArray[i] = "[space]";
 				}
-				if (0xDC00 > c ? rawCharset.length > i + 1 : false) {  // High surrogate
-					var d = rawCharset.charCodeAt(i + 1);
-					if (d >= 0xDC00 ? 0xE000 > d : false) {  // Low surrogate
-						var s = rawCharset.substring(i, i + 2);
-						i++;
-						if (charset.indexOf(s) == -1)
-							charset.push(s);
-						continue;
-					}
-				}
-				throw "Invalid UTF-16";
 			}
-			return charset;
 		}
-		
-		
-		function generatePassword(charset, len) {
-			var result = "";
-			for (var i = 0; len > i; i++)
-				result += charset[randomInt(charset.length)];
-			return result;
+	}
+	for (i = 0; i < easyToRememberArray.length; i=i+1) {
+		easyToRemember += easyToRememberArray[i] + " ";
+	}
+	return easyToRemember;
+}
+function isPasswordLengthValid(IdOfInput) { "use strict"; // In this function, set the aria-invalid attribute
+	if (isNaN(parseFloat($(IdOfInput).value)) || parseFloat($(IdOfInput).value) < parseFloat($("inputLength").getAttribute("min")) || parseFloat($(IdOfInput).value) > parseFloat($("inputLength").getAttribute("max"))) {
+		//alert("Please type a number between 8 and 100 for the “Length”.");	// When an onblur event calls a function that has an alert, Safari loops the alert infinitely
+		$(IdOfInput).setAttribute("aria-invalid", "true");
+	}
+	else {
+		$(IdOfInput).setAttribute("aria-invalid", "false");
+	}
+}
+function showItsEasierToRememberAs(bShow) { "use strict";
+	if (bShow) {
+		show("dtForOutputMnemonic");
+		show("ddForOutputMnemonic");
+	}
+	else {
+		hide("dtForOutputMnemonic");
+		hide("ddForOutputMnemonic");
+	}
+}
+function displayPassword() { "use strict"; // In this function, check the aria-invalid attribute
+	// I’m testing this here because I have to wait for the user to do something before I test it 
+	// see https://developers.google.com/web/updates/2015/04/cut-and-copy-commands?hl=en#known-bugs
+	if (document.queryCommandSupported("copy")) {
+		$("btnCopy").removeAttribute("hidden");
+$("LearnHowToRememberTheseStrongPasswords").removeAttribute("hidden");
+		$("spanPasswordWasCopied").removeAttribute("hidden");
+	}
+	if ($("inputLength").getAttribute("aria-invalid")==="false") {
+		var newStrongPasswordArray,
+		passwordIsOK = false,
+		StrongPassword = "",
+		i;
+		while (!passwordIsOK) {
+			newStrongPasswordArray = generatePassword($("inputLength").value, $("chkSymbols").checked, $("chkAvoidSimilarCharacters").checked, $("chkAvoidPunctuationUsedInProgramming").checked);
+			passwordIsOK = validate(newStrongPasswordArray, $("inputLength").value, $("chkSymbols").checked, $("chkAvoidPunctuationUsedInProgramming").checked);
 		}
-		
-		
-		// Returns a random integer in the range [0, n) using a variety of methods.
-		function randomInt(n) {
-			var x = randomIntMathRandom(n);
-			x = (x + randomIntBrowserCrypto(n)) % n;
-			return x;
+		for (i = 0; i < newStrongPasswordArray.length; i=i+1) {
+			StrongPassword += newStrongPasswordArray[i];
 		}
-		
-		
-		// Not secure or high quality, but always available.
-		function randomIntMathRandom(n) {
-			var x = Math.floor(Math.random() * n);
-			if (0 > x || x >= n)
-				throw "Arithmetic exception";
-			return x;
+		$("outputPassword").replaceChild(document.createTextNode(StrongPassword), $("outputPassword").firstChild);
+		$("outputPassword").focus();
+		$("outputMnemonic").replaceChild(document.createTextNode(makeMnemonic(newStrongPasswordArray, $("chkAvoidPunctuationUsedInProgramming").checked)), $("outputMnemonic").firstChild);
+		$("btnCopy").removeAttribute("disabled");
+		$("spanPasswordWasCopied").textContent = "";
+	}
+	else {
+		alert("Please type a number between 8 and 4096 for the “Length”.");
+		$("inputLength").focus();
+		//$("inputLength").select();
+	}
+	showItsEasierToRememberAs($("chkShowItsEasierToRememberAs").checked);
+}
+function showOptions() { "use strict";
+		show("fsOptions");
+		hide("btnShowOptions");
+}
+function saveTheseOptions() { "use strict";
+	var i,
+		inputsForSettings = $("olOptions").getElementsByTagName("input");
+	for (i = 0; i < inputsForSettings.length; i=i+1) {
+		// If it’s a number input, store its number in local storage
+		if (inputsForSettings[i].getAttribute("type")==="number") {
+			localStorage.setItem(inputsForSettings[i].id, inputsForSettings[i].value);
 		}
-		
-		
-		// Uses a secure, unpredictable random number generator if available; otherwise returns 0.
-		function randomIntBrowserCrypto(n) {
-			if (cryptoObject == null)
-				return 0;
-			// Generate an unbiased sample
-			var x = new Uint32Array(1);
-			do cryptoObject.getRandomValues(x);
-			while (x[0] - x[0] % n > 4294967296 - n);
-			return x[0] % n;
+		// If it’s a checkbox, store its state in local storage
+		if (inputsForSettings[i].getAttribute("type")==="checkbox") {
+			localStorage.setItem(inputsForSettings[i].id, inputsForSettings[i].checked.toString()); 
 		}
-		
-		
-		
-		/*-- Initialization --*/
-		
-		initCharsets();
-		initCrypto();
-		copyElem.disabled = true;
-		</script>
-	</body>
-</html>
+	}
+	alert("Your options have been saved in this browser.");
+}
+function applyOptions() { "use strict";
+	var i,
+		inputsForSettings = $("olOptions").getElementsByTagName("input");
+	for (i = 0; i < inputsForSettings.length; i=i+1) {
+		// If it’s a number input, and it already has a value in local storage, get its number from local storage
+		if ((inputsForSettings[i].getAttribute("type")==="number") && (localStorage.getItem(inputsForSettings[i].id) !== null)) {
+			inputsForSettings[i].value = localStorage.getItem(inputsForSettings[i].id);
+		}
+		// If it’s a checkbox, and it already has a value in local storage, get its value from local storage
+		if (inputsForSettings[i].getAttribute("type")==="checkbox" && (localStorage.getItem(inputsForSettings[i].id) !== null)) {
+			inputsForSettings[i].checked = (localStorage.getItem(inputsForSettings[i].id) === "true");
+		}
+	}
+}
+function copyText() { "use strict";
+	// Hat-tip: https://developers.google.com/web/updates/2015/04/cut-and-copy-commands?hl=en
+	// Clear any existing ranges, or the browser will keep copying the first password that it generates even after it generates other passwords
+	window.getSelection().removeAllRanges();
+	// Select the password text into a copyable range
+	var theRange = document.createRange();
+	theRange.selectNode($("outputPassword"));
+	window.getSelection().addRange(theRange);
+	try {
+		// Copy the selected range
+		document.execCommand('copy');
+		//alert("Password is copied.");
+		$("spanPasswordWasCopied").textContent = "Password is copied.";
+		$("btnCopy").setAttribute("disabled", "disabled");
+		$("spanPasswordWasCopied").focus();
+	}
+	catch(err) {
+		// Apologise and ask for feedback
+		alert("Sorry; copying failed. Please report this to Jwelsh@linz.govt.nz"); 
+	}
+}
+function addEventHandlers() { "use strict";
+//	var now = new Date().getTime();
+//	var page_load_time = now - performance.timing.navigationStart;
+//	console.log("User-perceived page loading time: " + page_load_time);
+
+// window.location = "https://" + window.location.hostname + window.location.pathname + window.location.search;
+	$("btnGenerate").onclick = displayPassword;
+	// Add the checkPasswordLength function to the input, even if the browser supports type="number"—because some browsers that support type="number" allow the user to type letters in it!
+	$("inputLength").onblur = function () { isPasswordLengthValid("inputLength"); }; //in case the browser doesn’t limit the input to numbers
+	$("btnSaveTheseOptions").onclick = saveTheseOptions;
+	applyOptions();
+	$("btnShowOptions").onclick = showOptions;
+	$("btnCopy").onclick = copyText;
+}
+
+// Register the service worker
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/serviceworker.js");
+}
+</script>
+		</fieldset>
+	</form>
+
+</div>
