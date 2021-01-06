@@ -135,11 +135,19 @@ btnGenerate {
 	line-height: 1.5;
 	padding: 1rem; 
 }
+
+h1 {
+	background: rgb(188,217,179);
+	background: linear-gradient(90deg, rgba(188,217,179,1) 0%, rgba(83,209,94,1) 35%, rgba(0,212,255,1) 100%);
+}
+
+
 h1,
 h2 {
-	background-color: hsla(200, 98%, 26%, 1);
+	
 	color: hsla(200, 98%, 95%, 1);
 	text-align: center;
+
 }
 h2,
 h3 {
@@ -269,9 +277,8 @@ fieldset[aria-labelledby="btnGenerate"] {
 #btnGenerate {
 	display: block;
 	color: hsla(200, 98%, 16%, 1);
-	background: hsla(120,60%,61%,1);
-	background: -webkit-linear-gradient(hsla(120,60%,51%,1), hsla(120,60%,71%,1));
-	background: linear-gradient(hsla(120,60%,51%,1), hsl(230deg 57% 68%));
+	background: rgb(188,217,179);
+background: linear-gradient(90deg, rgba(188,217,179,1) 0%, rgba(83,209,94,1) 35%, rgba(0,212,255,1) 100%);
 	font-size: 1.63636364em;
 	text-shadow: 0 0.03125em 0.03125em hsla(200,98%,95%,1);
 	transition: box-shadow 0.125s ease-in-out;
@@ -329,16 +336,23 @@ input:invalid {
 }
 kbd,
 #outputPassword, 
+
 #outputMnemonic {
-	color: hsl(348, 64%, 40%);
+	color: black;
 	background-color: #F9FDFC;
+	font-size: 22;
+	  text-shadow: 2px 2px 5px green;
+
+	
 }
 #outputPassword,
 #outputMnemonic {
 	display: inline-block;
-    background: hsla(200, 98%, 95%, 1);
-	/*box-shadow: 0 0 2em hsl(120,60%,30%);*/
+   background: rgb(187,237,194);
+background: linear-gradient(90deg, rgba(187,237,194,1) 0%, rgba(255,255,255,1) 48%, rgba(197,247,255,1) 100%);
+	/*box-shadow: 0 0 2em hsl(120deg 23% 43%);*/
 	padding: 0.25rem;
+	border-radius: 5;
 	/* next 5 lines prevent these fields from making this section wider when the password and mnemonic are generated */
 	width: 100%;
 	max-width: 19.203125rem;
@@ -701,36 +715,41 @@ align-items: stretch;
         <!-- LargeSkyscraperForSPG --><ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-1970339299953114" data-ad-slot="5182753315"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
 	<article aria-labelledby="StrongPasswordDefinition">
-		<h2 id="StrongPasswordDefinition">Password Requirements</h2>
+	
 		<section>
-			<h3>A strong password <strong>has</strong>:</h3>
+			<h3>Password Requirements:</h3>
 			<ol>
 				<li>at least <strong>8-16 characters</strong>
 				<li>at least <strong>1 Capital Letter</strong>
 				<li>at least <strong>1 Number</strong>
 				
 			</ol>
-		</section>
-		<section>
-			<h3>POI Requirements</h3>
-			<ul>
-<li>You can confirm customer identity by asking a minimum of two questions in <b>Section A</b> and a minimum of one question from <b>Section B</b>:</li>
 
-				<p><b>Section A</b>
+	
+		
+<p><h2>Section A</h2>
 
 				<li>What is/are your middle name(s)</li>
 <li>What is your date of birth?</li>
 <li>What email address is registered with your profile? (Used to issue digital certificate codes)</li>
-				<p><b>Section B</b>
+
+		</section>
+	
+	<h3>POI Requirements</h3>
+			
+You can confirm customer identity by asking a minimum of two questions in <b>Section A</b> and a minimum of one question from <b>Section B</b>:
+</section>
+				
+			<h2>Section B</h2>
 
 <li>Who is your firm’s trusted contact?</li>
 <li>When did you last log in (to the nearest week)?</li>
 <li>What document did you provide as your proof of identity document?</li>
 <li>When did you download your current digital certificate (to the nearest month)?</li>
-	
-			</ul>
-		</section>
-	</article>
+	</ul>
+			
+		
+</article>
 	<form aria-labelledby="PasswordGenerator"><!-- onsubmit="return false;"-->
         <h2 id="PasswordGenerator">Password Generator</h2>
 		<fieldset aria-labelledby="btnGenerate">
@@ -738,7 +757,7 @@ align-items: stretch;
 			<dl style="text-align: center;">
 				<dt>Your new password is:
 					<dd id="ddForOutputPassword">
-						<kbd id="outputPassword" tabindex="-1" aria-live="assertive" spellcheck="false" title="Triple-click the password to select it">[password will appear here]</kbd>
+						<kbd id="outputPassword" tabindex="-1" aria-live="assertive" spellcheck="false" title="Triple-click the password to select it">Generate PW</kbd>
 						<input id="btnCopy" type="button" value="Copy password" hidden>
 						<!--<span id="">…and now see <a href="#HowToRememberYourStrongPasswords">how to remember your strong&nbsp;password</a>!</span>-->
 						<span id="spanPasswordWasCopied" tabindex="-1" aria-live="assertive" hidden></span>
@@ -751,7 +770,7 @@ align-items: stretch;
 				<a href="#HowToRememberYourStrongPasswords"></a>
 			</p>
 
-			<input id="btnShowOptions" type="button" value="Show options…">
+			<input id="btnShowOptions" type="button" value="Show options">
 			<fieldset id="fsOptions" hidden>
 				<legend>Options:</legend>
 				<ol id="olOptions">
