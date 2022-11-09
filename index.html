@@ -1,6 +1,5 @@
 
-<!-- saved from url=(0030)https://pantherinae.github.io/ -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Password Generator</title>
+<title>Password Generator</title>
 <style media="screen">
 /*
 Colours:
@@ -714,25 +713,31 @@ align-items: stretch;
     }
 }
 </style>
-</head><body onload="addEventHandlers()">
+<body onload="addEventHandlers()">
 <header>
 	<h1>Strong Password Generator&nbsp;<span role="presentation">🔐</span></h1>
 </header>
 <main>
+
+
 <div id="divWrapperForFormAndDefinition">
     <aside class="halfPageAd">
-        <!-- LargeSkyscraperForSPG --><ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-1970339299953114" data-ad-slot="5182753315"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </aside>
+
+    
+
+</aside>
+
+
 	<article aria-labelledby="StrongPasswordDefinition">
 	
 		<section>
 			<h3>Password Requirements:</h3>
 			<ol>
-				<li>at least <strong>10-16 characters</strong>
-				</li><li>at least <strong>1 Capital Letter</strong>
-				</li><li>at least <strong>1 Number</strong>
+				<li>at least <strong>8-16 characters</strong>
+				<li>at least <strong>1 Capital Letter</strong>
+				<li>at least <strong>1 Number</strong>
 				
-			</li></ol>
+			</ol>
 
 	
 <h2>Section A</h2>
@@ -746,7 +751,7 @@ align-items: stretch;
 	<h3>POI Requirements</h3>
 			
 You can confirm customer identity by asking a minimum of two questions in <b>Section A</b> and a minimum of one question from <b>Section B</b>:
-
+</section>
 				
 			<h2>Section B</h2>
 
@@ -754,7 +759,7 @@ You can confirm customer identity by asking a minimum of two questions in <b>Sec
 <li>When did you last log in (to the nearest week)?</li>
 <li>What document did you provide as your proof of identity document?</li>
 <li>When did you download your current digital certificate (to the nearest month)?</li>
-	
+	</ul>
 			
 		
 </article>
@@ -764,50 +769,43 @@ You can confirm customer identity by asking a minimum of two questions in <b>Sec
 			<input id="btnGenerate" type="button" value="Generate password">
 			<dl style="text-align: center;">
 				<dt>Your new password is:
-					</dt><dd id="ddForOutputPassword">
-						<kbd id="outputPassword" tabindex="-1" aria-live="assertive" spellcheck="false" title="Triple-click the password to select it">eVz66VwZ5Q</kbd>
-						<input id="btnCopy" type="button" value="Copy password">
+					<dd id="ddForOutputPassword">
+						<kbd id="outputPassword" tabindex="-1" aria-live="assertive" spellcheck="false" title="Triple-click the password to select it">Generate PW</kbd>
+						<input id="btnCopy" type="button" value="Copy password" hidden>
 						<!--<span id="">…and now see <a href="#HowToRememberYourStrongPasswords">how to remember your strong&nbsp;password</a>!</span>-->
-						<span id="spanPasswordWasCopied" tabindex="-1" aria-live="assertive"></span>
+						<span id="spanPasswordWasCopied" tabindex="-1" aria-live="assertive" hidden></span>
 					</dd>
 					<!-- contenteditable="true" might be causing issues in Safari -->
-				<dt id="dtForOutputMnemonic">It’s easier to remember as:
-					</dt><dd id="ddForOutputMnemonic"><span id="outputMnemonic" spellcheck="false">echo
- VICTOR
- zulu
- 6 6 VICTOR
- whiskey
- ZULU
- 5 QUEBEC
- </span>
-			</dd></dl>
-			<p id="LearnHowToRememberTheseStrongPasswords">
-				<a href="https://pantherinae.github.io/#HowToRememberYourStrongPasswords"></a>
+				<dt id="dtForOutputMnemonic" hidden>It’s easier to remember as:
+					<dd id="ddForOutputMnemonic" hidden><span id="outputMnemonic" spellcheck="false">[mnemonic will appear here]</span>
+			</dl>
+			<p id="LearnHowToRememberTheseStrongPasswords" hidden>
+				<a href="#HowToRememberYourStrongPasswords"></a>
 			</p>
 
-			<input id="btnShowOptions" type="button" value="Show options" hidden="hidden">
-			<fieldset id="fsOptions">
+			<input id="btnShowOptions" type="button" value="Show options">
+			<fieldset id="fsOptions" hidden>
 				<legend>Options:</legend>
 				<ol id="olOptions">
 					<li>
 						<label for="inputLength">Length:</label>
 						<input id="inputLength" type="number" min="8" value="10" max="4096" aria-invalid="false">
-					</li><li>
+					<li>
 						<input id="chkShowItsEasierToRememberAs" type="checkbox" checked="checked">
 						<label for="chkShowItsEasierToRememberAs">Show phonetic words (“It’s easier to remember&nbsp;as:”)</label>
-					</li><li>
+					<li>
 						<input id="chkSymbols" type="checkbox">
 						<label for="chkSymbols">Include punctuation (<kbd>!</kbd>, <kbd>"</kbd>, <kbd>£</kbd>, <kbd>$</kbd>, and so&nbsp;on)</label>
-					</li><li>
+					<li>
 						<input id="chkAvoidPunctuationUsedInProgramming" type="checkbox" checked="checked">
-						<label for="chkAvoidPunctuationUsedInProgramming">Avoid punctuation used in programming (<kbd title="Backtick">`</kbd>,<kbd title="Dollar sign">$</kbd>,&nbsp;<kbd title="Single quote">'</kbd>, <kbd title="Double quote">"</kbd>, <kbd title="Ampersand">&amp;</kbd>, <kbd title="Space">[space]</kbd>, <kbd title="Comma">,</kbd>, <kbd title="Question mark">?</kbd>, <kbd title="At symbol">@</kbd>, <kbd title="Number sign">#</kbd>, <kbd title="Opening angle bracket">&lt;</kbd>, <kbd title="Closing angle bracket">&gt;</kbd>, <kbd title="Opening round bracket">(</kbd>, <kbd title="Closing round bracket">)</kbd>, <kbd title="Opening curly bracket">{</kbd>, <kbd title="Closing curly bracket">}</kbd>, <kbd title="Opening square bracket">[</kbd>, <kbd title="Closing square bracket">]</kbd>, <kbd title="Forward slash">/</kbd>, <kbd title="Backslash">\</kbd>)</label> <!-- Ticketmaster does not allow ` in passwords -->
-					</li><li>
+						<label for="chkAvoidPunctuationUsedInProgramming">Avoid punctuation used in programming (<kbd title="Backtick">`</kbd>,<kbd title="Dollar sign">$</kbd>,&nbsp;<kbd title="Single quote">&apos;</kbd>, <kbd title="Double quote">&quot;</kbd>, <kbd title="Ampersand">&amp;</kbd>, <kbd title="Space">[space]</kbd>, <kbd title="Comma">,</kbd>, <kbd title="Question mark">?</kbd>, <kbd title="At symbol">@</kbd>, <kbd title="Number sign">#</kbd>, <kbd title="Opening angle bracket">&lt;</kbd>, <kbd title="Closing angle bracket">&gt;</kbd>, <kbd title="Opening round bracket">(</kbd>, <kbd title="Closing round bracket">)</kbd>, <kbd title="Opening curly bracket">{</kbd>, <kbd title="Closing curly bracket">}</kbd>, <kbd title="Opening square bracket">[</kbd>, <kbd title="Closing square bracket">]</kbd>, <kbd title="Forward slash">/</kbd>, <kbd title="Backslash">\</kbd>)</label> <!-- Ticketmaster does not allow ` in passwords -->
+					<li>
 						<input id="chkAvoidSimilarCharacters" type="checkbox" checked="checked">
 						<label for="chkAvoidSimilarCharacters">Avoid similar characters (<kbd title="Number “One”">1</kbd>,&nbsp;<kbd title="Lower case letter “I”">i</kbd>, <kbd title="Upper case letter “I”">I</kbd>, <kbd title="Lower case letter “L”">l</kbd>, <kbd title="Upper case letter “L”">L</kbd>), and (<kbd title="Number “Zero”">0</kbd>, <kbd title="Lower case letter “O”">o</kbd>, <kbd title="Upper case letter “O”">O</kbd>)</label>
-					</li><li>
+					<li>
 						<input id="btnSaveTheseOptions" type="button" value="Save these options" aria-describedby="spanUseThisOnlyOnPrivateComputers"> 
                         <span id="spanUseThisOnlyOnPrivateComputers">(Don’t save your options on public&nbsp;computers)</span>
-				</li></ol>
+				</ol>
 			</fieldset>
 <script>
 function $(theID) { "use strict";
@@ -1126,4 +1124,3 @@ if ("serviceWorker" in navigator) {
 	</form>
 
 </div>
-</main></body></html>
